@@ -113,13 +113,14 @@ class XWVHttpServer : NSObject {
         guard self.port != 0 else { return false }
 
         #if os(iOS)
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(XWVHttpServer.suspend(_:)),
-                                               name: NSNotification.Name.UIApplicationDidEnterBackground,
+                                               name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(XWVHttpServer.resume(_:)),
-                                               name: NSNotification.Name.UIApplicationWillEnterForeground,
+                                               name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
         #endif
         return true
@@ -127,8 +128,8 @@ class XWVHttpServer : NSObject {
 
     func stop() {
         #if os(iOS)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
         #endif
         port = 0
         close()
